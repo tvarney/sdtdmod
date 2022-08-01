@@ -1,0 +1,10 @@
+# github.com/beevik/etree v1.1.0
+## explicit
+github.com/beevik/etree
+# github.com/tvarney/maputil v1.1.1
+## explicit; go 1.16
+github.com/tvarney/maputil
+github.com/tvarney/maputil/consterr
+github.com/tvarney/maputil/errctx
+github.com/tvarney/maputil/mpath
+github.com/tvarney/maputil/unpack
