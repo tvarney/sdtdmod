@@ -1,8 +1,23 @@
 package key
 
 const (
-	Type = "type"
-	Cond = "if"
+	Actions  = "actions"
+	Add      = "add"
+	Attr     = "attr"
+	Children = "children"
+	Cond     = "if"
+	Match    = "match"
+	Matches  = "matches"
+	Max      = "max"
+	Min      = "min"
+	Mult     = "mult"
+	Name     = "name"
+	Prec     = "precision"
+	Prefix   = "prefix"
+	Regex    = "regex"
+	Suffix   = "suffix"
+	Type     = "type"
+	Value    = "value"
 
 	MatchTag   = "tag"
 	MatchAttr  = "attr"

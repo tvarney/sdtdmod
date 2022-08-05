@@ -10,11 +10,11 @@ import (
 )
 
 func UnpackMatchArray(ctx *errctx.Context, match map[string]interface{}) []node.Match {
-	raw := unpack.RequireArray(ctx, match, "matches")
+	raw := unpack.RequireArray(ctx, match, key.Matches)
 	if len(raw) == 0 {
 		return nil
 	}
-	ctx.Path.Add(mpath.Key("matches"))
+	ctx.Path.Add(mpath.Key(key.Matches))
 
 	matches := make([]node.Match, 0, len(raw))
 	for idx, v := range raw {
@@ -38,7 +38,7 @@ func UnpackMatchArray(ctx *errctx.Context, match map[string]interface{}) []node.
 	return matches
 }
 func UnpackMatch(ctx *errctx.Context, match map[string]interface{}) node.Match {
-	mtype := unpack.RequireStringEnum(ctx, match, "type", key.MatchTypes)
+	mtype := unpack.RequireStringEnum(ctx, match, key.Type, key.MatchTypes)
 	switch mtype {
 	case key.MatchTag:
 		return UnpackMatchTag(ctx, match)
@@ -58,26 +58,26 @@ func UnpackMatch(ctx *errctx.Context, match map[string]interface{}) node.Match {
 
 func UnpackMatchTag(ctx *errctx.Context, match map[string]interface{}) node.Match {
 	return &node.TagMatch{
-		Value:  unpack.OptionalString(ctx, match, "value", ""),
+		Value:  unpack.OptionalString(ctx, match, key.Value, ""),
 		Regex:  UnpackRegex(ctx, match),
-		Prefix: unpack.OptionalString(ctx, match, "prefix", ""),
-		Suffix: unpack.OptionalString(ctx, match, "suffix", ""),
+		Prefix: unpack.OptionalString(ctx, match, key.Prefix, ""),
+		Suffix: unpack.OptionalString(ctx, match, key.Suffix, ""),
 	}
 }
 
 func UnpackMatchAttr(ctx *errctx.Context, match map[string]interface{}) node.Match {
-	attr, aerr := maputil.RequireString(match, "name")
+	attr, aerr := maputil.RequireString(match, key.Name)
 	if aerr != nil {
-		ctx.ErrorWithKey(aerr, "name")
+		ctx.ErrorWithKey(aerr, key.Name)
 		return nil
 	}
 
 	return &node.AttrMatch{
 		Attribute: attr,
-		Value:     unpack.OptionalString(ctx, match, "value", ""),
+		Value:     unpack.OptionalString(ctx, match, key.Value, ""),
 		Regex:     UnpackRegex(ctx, match),
-		Prefix:    unpack.OptionalString(ctx, match, "prefix", ""),
-		Suffix:    unpack.OptionalString(ctx, match, "suffix", ""),
+		Prefix:    unpack.OptionalString(ctx, match, key.Prefix, ""),
+		Suffix:    unpack.OptionalString(ctx, match, key.Suffix, ""),
 	}
 }
 
@@ -106,11 +106,11 @@ func UnpackMatchOneOf(ctx *errctx.Context, match map[string]interface{}) node.Ma
 }
 
 func UnpackMatchNot(ctx *errctx.Context, match map[string]interface{}) node.Match {
-	submatch := unpack.RequireObject(ctx, match, "match")
+	submatch := unpack.RequireObject(ctx, match, key.Match)
 	if submatch == nil {
 		return nil
 	}
-	ctx.Path.Add(mpath.Key("match"))
+	ctx.Path.Add(mpath.Key(key.Match))
 	m := UnpackMatch(ctx, submatch)
 	ctx.Path.Pop()
 	if m == nil {

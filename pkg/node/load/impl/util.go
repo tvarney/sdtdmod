@@ -9,6 +9,7 @@ import (
 	"github.com/tvarney/maputil/unpack"
 	"github.com/tvarney/sdtdmod/pkg/errors"
 	"github.com/tvarney/sdtdmod/pkg/node"
+	"github.com/tvarney/sdtdmod/pkg/node/key"
 )
 
 // CreateErrCtx creates an error context for loading nodes.
@@ -40,13 +41,13 @@ func GetError(ctx *errctx.Context) error {
 
 // UnpackRegex unpacks a regex
 func UnpackRegex(ctx *errctx.Context, obj map[string]interface{}) *regexp.Regexp {
-	raw := unpack.OptionalString(ctx, obj, "regex", "")
+	raw := unpack.OptionalString(ctx, obj, key.Regex, "")
 	if raw == "" {
 		return nil
 	}
 	r, err := regexp.Compile(raw)
 	if err != nil {
-		ctx.ErrorWithKey(err, "regex")
+		ctx.ErrorWithKey(err, key.Regex)
 		return nil
 	}
 	return r
@@ -54,12 +55,12 @@ func UnpackRegex(ctx *errctx.Context, obj map[string]interface{}) *regexp.Regexp
 
 // UnpackCondition fetches the 'if' key and if present converts it to a Match.
 func UnpackCondition(ctx *errctx.Context, action map[string]interface{}) node.Match {
-	rawCond := unpack.OptionalObject(ctx, action, "if", nil)
+	rawCond := unpack.OptionalObject(ctx, action, key.Cond, nil)
 	if rawCond == nil {
 		return nil
 	}
 
-	ctx.Path.Add(mpath.Key("if"))
+	ctx.Path.Add(mpath.Key(key.Cond))
 	cond := UnpackMatch(ctx, rawCond)
 	ctx.Path.Pop()
 	return cond

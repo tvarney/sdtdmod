@@ -42,7 +42,7 @@ func UnpackActionList(ctx *errctx.Context, raw []interface{}) []node.Action {
 
 // UnpackAction takes a JSON object and unpacks it to an Action.
 func UnpackAction(ctx *errctx.Context, action map[string]interface{}) node.Action {
-	atype := unpack.RequireStringEnum(ctx, action, "type", key.ActionTypes)
+	atype := unpack.RequireStringEnum(ctx, action, key.Type, key.ActionTypes)
 	switch atype {
 	case key.ActionNumber:
 		return UnpackActionNumber(ctx, action)
@@ -60,18 +60,18 @@ func UnpackAction(ctx *errctx.Context, action map[string]interface{}) node.Actio
 
 // UnpackActionNumber takes a JSON object and unpacks it to a Number Action.
 func UnpackActionNumber(ctx *errctx.Context, action map[string]interface{}) node.Action {
-	attr := unpack.RequireString(ctx, action, "attr")
+	attr := unpack.RequireString(ctx, action, key.Attr)
 	if attr == "" {
 		return nil
 	}
 
 	return &node.Number{
 		Attribute: attr,
-		Mult:      unpack.OptionalNumber(ctx, action, "mult", 1.0),
-		Add:       unpack.OptionalNumber(ctx, action, "add", 0.0),
-		Min:       unpack.OptionalNumber(ctx, action, "min", -math.MaxFloat64),
-		Max:       unpack.OptionalNumber(ctx, action, "max", math.MaxFloat64),
-		Precision: int(unpack.OptionalInteger(ctx, action, "precision", -1)),
+		Mult:      unpack.OptionalNumber(ctx, action, key.Mult, 1.0),
+		Add:       unpack.OptionalNumber(ctx, action, key.Add, 0.0),
+		Min:       unpack.OptionalNumber(ctx, action, key.Min, -math.MaxFloat64),
+		Max:       unpack.OptionalNumber(ctx, action, key.Max, math.MaxFloat64),
+		Precision: int(unpack.OptionalInteger(ctx, action, key.Prec, -1)),
 		If:        UnpackCondition(ctx, action),
 	}
 }
@@ -80,8 +80,8 @@ func UnpackActionNumber(ctx *errctx.Context, action map[string]interface{}) node
 // Action.
 func UnpackActionInsertAttr(ctx *errctx.Context, action map[string]interface{}) node.Action {
 	errs := ctx.ErrorCount()
-	attribute := unpack.RequireString(ctx, action, "name")
-	value := unpack.RequireString(ctx, action, "value")
+	attribute := unpack.RequireString(ctx, action, key.Name)
+	value := unpack.RequireString(ctx, action, key.Value)
 	if ctx.ErrorCount() != errs {
 		return nil
 	}
@@ -103,7 +103,7 @@ func UnpackActionInsertElement(ctx *errctx.Context, action map[string]interface{
 // Action.
 func UnpackActionRemoveAttr(ctx *errctx.Context, action map[string]interface{}) node.Action {
 	errs := ctx.ErrorCount()
-	attribute := unpack.RequireString(ctx, action, "name")
+	attribute := unpack.RequireString(ctx, action, key.Name)
 	if ctx.ErrorCount() != errs {
 		return nil
 	}
