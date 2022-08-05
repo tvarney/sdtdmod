@@ -1,0 +1,33 @@
+[
+  {
+    "match": {
+      "type": "all-of",
+      "matches": [
+        {
+          "type": "tag",
+          "value": "block"
+        },
+        {
+          "type": "attr",
+          "name": "name",
+          "prefix": "terrOre"
+        }
+      ]
+    },
+    "children": [
+      {
+        "match": {
+          "type": "tag",
+          "value": "drop"
+        },
+        "actions": [
+          {
+            "type": "update-number",
+            "attr": "count",
+            "mul": 1.5
+          }
+        ]
+      }
+    ]
+  }
+]

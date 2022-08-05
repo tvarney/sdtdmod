@@ -1,6 +1,8 @@
 package impl
 
 import (
+	"fmt"
+
 	"github.com/tvarney/maputil"
 	"github.com/tvarney/maputil/errctx"
 	"github.com/tvarney/maputil/mpath"
@@ -57,6 +59,7 @@ func UnpackNode(ctx *errctx.Context, v map[string]interface{}) *node.Node {
 	}
 
 	if n.Children == nil && n.Actions == nil && n.Match == nil {
+		ctx.Error(fmt.Errorf("node requires at least one of %q, %q, or %q", key.Match, key.Actions, key.Children))
 		return nil
 	}
 
